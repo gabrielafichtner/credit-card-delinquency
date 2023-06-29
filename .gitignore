@@ -1,3 +1,9 @@
+# remove DS_store
+
+.DS_Store
+application_record.csv
+credit_record.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
