@@ -2,8 +2,6 @@
 
 .DS_Store
 .ipynb_checkpoints 
-application_record.csv
-credit_record.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
