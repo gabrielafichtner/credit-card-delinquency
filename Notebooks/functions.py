@@ -63,6 +63,9 @@ def credit_approval_data_cleaner(credit_data, application_data, months_list):
     # Clean application data
     application_data = application_data.drop(columns='CODE_GENDER')
     application_data['OCCUPATION_TYPE'].fillna('missing', inplace=True)
+    application_data['DAYS_EMPLOYED'] = application_data['DAYS_EMPLOYED'].where(application_data['DAYS_EMPLOYED'] < 0, 0)
+    application_data['OCCUPATION_TYPE'] = application_data['OCCUPATION_TYPE'].where(application_data['DAYS_EMPLOYED'] < 0, 'Retired')
+    application_data['AGE'] = (abs(application_data['DAYS_BIRTH']) / 365).astype(int)
 
     # Merge cleaned credit and application data
     return credit_cleaned.merge(application_data, how='inner', on='ID')
