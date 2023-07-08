@@ -18,12 +18,11 @@ Data Dictionary
 | NAME_EDUCATION_TYPE | Education level | object |
 | NAME_FAMILY_STATUS | Marital status | object |
 | NAME_HOUSING_TYPE | Type of housing | object |
-| DAYS_BIRTH | Number of days since birth | int64 |
-| DAYS_EMPLOYED | Number of days employed | int64 |
 | FLAG_MOBIL | 1 indicates mobile phone ownership and 0 is no ownership | bool |
 | FLAG_WORK_PHONE | 1 indicates work phone ownership and 0 is no ownership | bool |
 | FLAG_PHONE | 1 indicates phone ownership and 0 is no ownership | bool |
 | FLAG_EMAIL | 1 indicates email ownership and 0 is no ownership | bool |
 | OCCUPATION_TYPE | Occupation | object |
-| CNT_FAM_MEMBERS | Family size | float64 |
+| CNT_FAM_MEMBERS | Family size | int64 |
 | AGE | Age | int64 |
+| YEARS_EMPLOYED | Length of employment | int64 |
