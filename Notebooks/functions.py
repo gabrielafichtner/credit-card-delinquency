@@ -63,11 +63,24 @@ def credit_approval_data_cleaner(credit_data, application_data, months_list):
     # Clean application data
     application_data = application_data.drop(columns='CODE_GENDER')
     application_data['OCCUPATION_TYPE'].fillna('missing', inplace=True)
-    application_data['DAYS_EMPLOYED'] = np.where(application_data['DAYS_EMPLOYED'] > 0, 0, application_data['DAYS_EMPLOYED'])
-    application_data['OCCUPATION_TYPE'] = np.where(application_data['DAYS_EMPLOYED'] == 0, 'Retired', application_data['OCCUPATION_TYPE'])
+    
+    application_data['DAYS_EMPLOYED'] = np.where(
+        application_data['DAYS_EMPLOYED'] > 0, 0, application_data['DAYS_EMPLOYED'])
+    
+    application_data['OCCUPATION_TYPE'] = np.where(
+        application_data['DAYS_EMPLOYED'] == 0, 'Retired', application_data['OCCUPATION_TYPE'])
+    
     application_data['AGE'] = (abs(application_data['DAYS_BIRTH']) / 365).astype(int)
+    
     application_data['YEARS_EMPLOYED'] = (abs(application_data['DAYS_EMPLOYED']) / 365).astype(int)
+    
     application_data.drop(columns = ['DAYS_BIRTH', 'DAYS_EMPLOYED'], inplace = True)
 
+
     # Merge cleaned credit and application data
-    return credit_cleaned.merge(application_data, how='inner', on='ID')
+    cridit_new = credit_cleaned.merge(application_data, how='inner', on='ID')
+    
+    cridit_new.columns = cridit_new.columns.str.lower()
+    
+    return cridit_new
+    
