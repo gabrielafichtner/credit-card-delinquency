@@ -155,6 +155,44 @@ All models are trained across all our target variables ("is_delinquent", "3mo_de
 
 These models, collectively, provide a robust suite of predictive tools. Each model has its strengths and weaknesses, and using them together allows for better performance and the ability to capture a wider range of patterns in the data.
 
+# Best Model: AdaBoost
+
+Our project utilizes advanced machine learning techniques to help small and medium-sized banks predict customer delinquency. The current best model is an AdaBoost Classifier, which combines the strengths of multiple weak learners to form a strong predictive model.
+
+## Model Parameters and Training
+
+The AdaBoost model we used has a Decision Tree Classifier as its base estimator. We used GridSearchCV to find the best parameters for this model from a predefined parameter grid. Here are the parameters we used for the GridSearch:
+
+- 'learning_rate': [2.25, 2.5, 2.7],
+- 'n_estimators': [250, 300, 350],
+- 'estimator__max_depth': [71, 81, 91, 101, None],
+- 'estimator__max_features': ['auto', 'sqrt', 'log2']
+
+## Results
+
+The best AdaBoost model had the following parameters:
+
+- 'n_estimators': 300
+- 'learning_rate': 2.25
+- 'estimator__max_depth': None
+- 'estimator__max_features': 'auto'
+
+This model achieved a training score of 0.9087652929813265 and a testing score of 0.7933032839665164, indicating a good balance between bias and variance and suggesting that the model generalizes well to unseen data. 
+
+## Implications
+
+The AdaBoost model's strength lies in its ability to focus on instances that are hard to classify, by assigning them higher weights in subsequent iterations. This characteristic makes it well-suited to the task of predicting customer delinquency, which often involves dealing with imbalanced datasets where delinquent customers may be in the minority.
+
+By accurately predicting customer delinquency, our model enables banks to make more informed decisions when onboarding new customers, thus minimizing the risk of default. This will be particularly beneficial for small and medium-sized banks looking to optimize their risk assessment processes. 
+
+## Saving and Loading the Model
+
+We saved the trained model using the `pickle` module in Python. This allows us to easily reuse the model in the future without having to retrain it. The pickled model can be loaded and used to make predictions on new data with just a few lines of code. 
+
+## Future Directions
+
+While the AdaBoost model has proven effective, we're continually looking to refine our model. Future work will focus on exploring other machine learning techniques, fine-tuning model parameters, and incorporating additional relevant features to improve the model's predictive performance.
+
 ## Project Contributors
 
 This project has been a collaborative effort by our team members:
