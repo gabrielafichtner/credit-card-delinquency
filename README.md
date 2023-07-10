@@ -2,7 +2,14 @@
 
 ## Project Description
 
-This project aims at building a predictive model to anticipate credit card delinquency, a crucial risk management technique in the financial industry. By analyzing personal information and historical credit-related data of cardholders, we can estimate the likelihood of future payment defaults and implement efficient risk control measures. The project utilizes two datasets: one containing application data with crucial client information and the other focusing on credit card details.
+This project is dedicated to the development of a predictive model that anticipates **credit card delinquency**, a key risk management strategy in the financial sector. Utilizing personal data and historical credit information of cardholders, this model estimates the probability of future payment defaults, thus facilitating the implementation of effective risk control measures.
+
+The project leverages two distinct datasets:
+- **Application Data**: This set includes vital client information.
+- **Credit Details**: This set provides comprehensive data on credit card usage and behaviors.
+
+By integrating and analyzing these datasets, the project provides a nuanced and sophisticated tool for anticipating and managing credit card delinquency.
+
 
 ## Data Overview
 
@@ -41,7 +48,16 @@ The final sample for analysis contains over 36,000 unique applications that are 
 
 ## Preliminary Data Analysis
 
-The first stage involved conducting exploratory data analysis on the raw data. The primary aim was to assess data integrity and ensure consistency. This analysis revealed an unbalanced dataset with a significant proportion of individuals without any debt. The feature OCCUPATION_TYPE was the only column containing missing values. A segment of these were attributed to retirement, while the rest were simply missing. Additionally, it was observed that an anomaly existed in the MONTHS_BALANCE data with irregular jumps roughly every six months.
+- **Data Imbalance**: The dataset exhibited a substantial class imbalance, with a majority of the individuals recorded as not having any outstanding debt. This imbalance could potentially introduce bias in our predictive model, emphasizing the need for careful handling during model training. Approaches like oversampling the minority class, undersampling the majority class, or using synthetic data generation methods such as Synthetic Minority Over-sampling Technique (SMOTE) may be explored.
+
+- **Missing Values in OCCUPATION_TYPE**: We identified that the `OCCUPATION_TYPE` feature had several missing entries. On closer examination, a portion of these missing values corresponded to the retired individuals, presumably because they are currently not associated with any occupation. However, a significant fraction of the missing values remained unexplained and would need to be addressed through appropriate data imputation strategies.
+
+- **Anomaly in MONTHS_BALANCE**: An anomalous pattern was detected in the `MONTHS_BALANCE` feature. The data showed irregular jumps occurring approximately every six months. Understanding the nature of these anomalies and the potential impact they could have on our analysis is vital. Possible explanations might be seasonality effects or data collection issues, both of which warrant further investigation.
+
+- **Data Consistency**: Beyond these specific points, the EDA process also helped us ensure the overall consistency of our dataset. We checked for other missing values, outliers, and potential errors, ensuring the dataset's readiness for the subsequent stages of our project.
+
+By addressing these challenges upfront, we can improve the reliability of our findings and the predictive power of our final model.
+
 
 ## Data Cleaning
 
@@ -61,7 +77,83 @@ The data cleaning process aimed at enhancing data quality by:
 
 ## Exploratory Data Analysis with Cleaned Data
 
-The cleaned dataset was then subjected to further EDA to gain insights into the relationships among variables and potential correlations. Certain correlations such as between the count of children and family count were deemed unimportant. However, there were interesting negative correlations identified between the length of credit and delinquency. Graphical analysis revealed that having a car or property significantly influenced the length of credit rather than the number of delinquent months or the average delinquency rate.
+The data cleaning stage is integral to our data analysis pipeline, aiming to enhance the overall data quality and thereby improve the reliability of our model predictions. This phase encompassed several steps, each addressing specific data quality issues:
+
+- **Removal of Duplicated IDs**: In our initial dataset, we observed 47 instances of duplicated IDs. It is important to emphasize that these were not complete row duplications, but only the IDs were duplicated. A comprehensive analysis of these entries revealed significant differences between the records sharing the same ID, indicating these were likely data entry errors rather than genuinely duplicated records. To maintain data integrity and avoid potentially skewed analyses, we chose to remove these instances from the dataset.
+
+- **Handling Missing Values**: The `OCCUPATION_TYPE` feature was identified to have a substantial number of missing values. To address this, instead of discarding these records or filling them with a calculated value, we chose to label these missing values explicitly as 'missing'. This approach preserves the original data structure while clearly indicating the absence of information.
+
+- **Dropping Irrelevant Features**: As part of our effort to ensure our model is ethical and fair, we decided to drop the `GENDER` feature. This decision was made to prevent our model from potentially propagating systemic bias. We also dropped the `DAYS_EMPLOYED` and `DAYS_BIRTH` features as these did not provide valuable insights in their current format and were not readily interpretable.
+
+- **Feature Engineering**: Beyond cleaning and refining the existing data, we also generated new features to enrich our dataset and potentially enhance our model's predictive power. These new features include `is_delinquent`, `length_of_credit`, `6mo_delinquency`, `12mo_delinquency`, among others. Each of these features was designed with a specific purpose in mind, such as capturing trends over time or providing a more nuanced view of the individual's credit behavior.
+
+- **Merging Datasets**: To create a comprehensive view of each individual's credit situation, we merged the application and credit datasets. This merge operation was performed on the 36,457 unique IDs shared between the two datasets, resulting in a unified dataset ready for further analysis.
+
+- **Custom Function for Data Cleaning**: We developed a custom function, `credit_approval_data_cleaner`, to automate the data cleaning process. This function was applied to the training data during the data preparation stage and was later used to clean the test set data during the model evaluation stage.
+
+Through these extensive data cleaning operations, we ensured the resulting dataset is reliable, representative, and ready for further preprocessing and modeling tasks.
+rate.
+
+
+## Data Preparation for Modeling
+
+The predictive modeling process begins by segregating the dataset into features and labels. The labels represent four different binary delinquency outcomes, which provide details on whether a client is delinquent and, if so, whether the delinquency occurred over the course of 3, 6, or 12 months. 
+
+The features exclude the IDs, all the above-mentioned labels, and a couple of other features such as `number_of_delinquent_months` and `average_delinquency_rate`. These dropped features would not be available at the time of prediction in a real-world scenario.
+
+The data preparation process entails the following steps:
+
+1. **Features and Labels Definition**: We first define our features and labels. Our features exclude IDs and various delinquency-related columns, ensuring we only include data available at the time of prediction in real-world situations. Our labels are the different binary delinquency outcomes.
+
+2. **Train-Test Split**: We split our data into training and validation sets for each of the four delinquency outcomes using the `train_test_split` function from sklearn. We used an 80-20 split, with 80% of the data forming the training set and the remaining 20% forming the validation set. The random state was set to 42 to ensure repeatability of results.
+
+3. **Feature Type Identification**: The features are further categorized into categorical and numerical features based on their data types. This step is essential for the subsequent feature encoding and scaling processes.
+
+4. **Feature Encoding and Scaling**: For the categorical features, we used One-Hot Encoding (OHE), dropping the first category to avoid the dummy variable trap. For the numerical features, we applied Standard Scaling to standardize the feature values.
+
+5. **Column Transformation**: We used the `ColumnTransformer` from sklearn to apply the above transformations to the appropriate features. This process ensures that our data is in a format suitable for machine learning algorithms.
+
+After these steps, the data is prepared and ready for the modeling stage.
+
+## Model Training and Scoring
+
+We built a custom function `fit_and_score` to streamline the process of fitting our model to the data and evaluating its performance. This function accepts a GridSearchCV instance, the training and validation data for the features and labels, and a name string for identification purposes.
+
+The function performs the following tasks:
+
+1. **Model Fitting**: The function fits the GridSearchCV instance (our model along with hyperparameters to tune) on the training data.
+
+2. **Training Score Calculation**: The function calculates the model's performance score on the training data.
+
+3. **Testing Score Calculation**: The function also calculates the model's performance score on the validation data. This gives us an idea of how well our model generalizes to unseen data.
+
+4. **Best Parameters Identification**: After fitting the model, the function identifies the best hyperparameters, providing insights into which parameters yield the best model performance.
+
+5. **Storing Best Parameters**: The best parameters for each model are then returned by the function for later use and are stored in a dictionary.
+
+By creating and utilizing the `fit_and_score` function, we can efficiently train and evaluate our models in a consistent manner. This approach helps ensure comparability of results across different models and target variables. It also aids in maintaining clean and readable code, as repetitive tasks are wrapped up in this function. 
+
+We apply this function across all our target variables ("is_delinquent", "3mo_delinquency", "6mo_delinquency"), allowing us to fine-tune and evaluate models for predicting each of these outcomes.
+
+## Model Implementation
+
+Multiple machine learning models were used in this project, each with their unique capabilities to handle classification tasks. The models include Gradient Boosting, AdaBoost, Support Vector Classifier (SVC), Logistic Regression, Random Forest, and a Deep Neural Network. Below is a brief explanation for each:
+
+1. **Gradient Boosting**: This model was initially run with default parameters, and then a grid search was performed to find the optimal hyperparameters. The parameter grid included varying learning rates, numbers of estimators, and max depth values.
+
+2. **AdaBoost**: This model was also implemented with a decision tree classifier as a base estimator. A grid search was performed to optimize the learning rate, number of estimators, max depth of the base estimator, and the max features of the base estimator.
+
+3. **Support Vector Classifier (SVC)**: This model was run initially with a radial basis function kernel and then optimized using our `fit_and_score` function.
+
+4. **Logistic Regression**: A logistic regression model was also trained. A grid search was used to optimize the inverse of regularization strength (C), the penalty (l2 was used), the solver, and the maximum number of iterations.
+
+5. **Random Forest**: A Random Forest Classifier was implemented, with a grid search to optimize the number of estimators, minimum samples required to split an internal node, the minimum number of samples required to be at a leaf node, and the number of features to consider when looking for the best split.
+
+6. **Deep Neural Network (DNN)**: Lastly, a Deep Neural Network was built using the Keras library with TensorFlow as the backend. This model includes multiple layers of neurons with activation functions. It is compiled with binary cross-entropy as the loss function, Adam as the optimizer, and accuracy and recall as the metrics. The model also includes an early stopping mechanism to prevent overfitting by restoring the model weights from the epoch with the best value of the monitored quantity.
+
+All models are trained across all our target variables ("is_delinquent", "3mo_delinquency", "6mo_delinquency"), with each model's best parameters stored in a dictionary for later use.
+
+These models, collectively, provide a robust suite of predictive tools. Each model has its strengths and weaknesses, and using them together allows for better performance and the ability to capture a wider range of patterns in the data.
 
 ## Project Contributors
 
