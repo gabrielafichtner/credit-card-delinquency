@@ -14,7 +14,7 @@ By integrating and analyzing these datasets, the project provides a nuanced and 
 
 In the banking sector, particularly for small and medium-sized banks, accurately assessing credit risk when onboarding new customers is a crucial yet challenging task. The resources and tools required for detailed credit history analysis are often lacking, resulting in broad-brush approaches that can overlook potential customers or accept high-risk ones.
 
-Our AI-powered solution, tailored for these banks, employs a sophisticated machine learning model to predict credit delinquency based on a range of factors, including various delinquency periods. By leveraging the RandomForestClassifier, our model delivers high accuracy in predicting credit risk, helping banks make informed credit decisions.
+Our AI-powered solution, tailored for these banks, employs a sophisticated machine learning model to predict credit delinquency based on a range of factors, including various delinquency periods. By leveraging the AdaBoost, our model delivers high accuracy in predicting credit risk, helping banks make informed credit decisions.
 
 With our solution, banks can enhance their credit risk assessments, reduce default rates, align their services with customer risk profiles, and minimize reliance on less comprehensive risk assessment methods. Our predictive model can be seamlessly integrated into banks' existing risk assessment workflows for smooth implementation.
 
