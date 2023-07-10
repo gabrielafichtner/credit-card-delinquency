@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This project is dedicated to the development of a predictive model that anticipates **credit card delinquency**, a key risk management strategy in the financial sector. Utilizing personal data and historical credit information of cardholders, this model estimates the probability of future payment defaults, thus facilitating the implementation of effective risk control measures.
+This project is dedicated to the development of a predictive model that anticipates **credit card delinquency**, a key risk management strategy in the financial sector. Utilizing personal data and historical credit information of cardholders, this model estimates the probability of payment defaults, thus facilitating the implementation of effective risk control measures.
 
 The project leverages two distinct datasets:
 - **Application Data**: This set includes vital client information.
@@ -199,5 +199,5 @@ This project has been a collaborative effort by our team members:
 
 - Argishti Ovsepyan
 - Masood Dastan
-- Gabriella Fichtner
+- Gabriela Fichtner
 - Saamir Shamsie
